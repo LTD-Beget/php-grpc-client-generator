@@ -1,0 +1,25 @@
+{
+  "name": "ltd-beget/php-proto-generator",
+  "description": "Generate classes after protoc-gen-php",
+  "license": "MIT",
+  "keywords": ["proto"],
+  "min-stability": "dev",
+  "authors": [
+    {
+      "name": "echern",
+      "email": "echern@beget.ru"
+    }
+  ],
+  "require": {
+    "php": ">=5.4.0",
+    "grpc/grpc": "v1.0.0",
+    "nikic/PHP-Parser": "^2.1"
+  },
+  "autoload": {
+    "psr-4": {
+      "LTDBeget\\PhpProtoGenerator\\": [
+        "src/"
+      ]
+    }
+  }
+}
