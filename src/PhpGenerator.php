@@ -3,11 +3,11 @@
 namespace LTDBeget\PhpProtoGenerator;
 
 /**
- * Class Generator
+ * Class PhpGenerator
  *
  * @package LTDBeget\PhpProtoGenerator
  */
-class Generator
+class PhpGenerator
 {
     const STUB_PARENT_CLASS_NS = '\Grpc\BaseStub';
 
@@ -53,12 +53,12 @@ class Generator
     /**
      * @param string $phpFile
      *
-     * @throws GeneratorException
+     * @throws PhpGeneratorException
      */
     private function parseAndCreate($phpFile)
     {
         if (!is_file($phpFile)) {
-            throw new GeneratorException("File {$phpFile} does bot exist");
+            throw new PhpGeneratorException("File {$phpFile} does bot exist");
         }
 
         $this->clearStorage();
@@ -166,7 +166,7 @@ class Generator
      * @param string                           $className
      * @param \PhpParser\Node\Stmt\ClassMethod $method
      *
-     * @throws GeneratorException
+     * @throws PhpGeneratorException
      */
     private function processMethod($namespaceName, $className, \PhpParser\Node\Stmt\ClassMethod $method)
     {
@@ -174,25 +174,25 @@ class Generator
         $params     = $method->params;
 
         if (!isset($params[0])) {
-            throw new GeneratorException("No params found in {$namespaceName}{$className}::{$methodName}");
+            throw new PhpGeneratorException("No params found in {$namespaceName}{$className}::{$methodName}");
         }
 
         /* @var \PhpParser\Node\Param $firstParam */
         $firstParam = $params[0];
 
         if ($firstParam->type === NULL) {
-            throw new GeneratorException("First param type invalid in {$namespaceName}{$className}::{$methodName}");
+            throw new PhpGeneratorException("First param type invalid in {$namespaceName}{$className}::{$methodName}");
         }
 
         if (!($firstParam->type instanceof \PhpParser\Node\Name\FullyQualified)) {
-            throw new GeneratorException("First param type invalid in {$namespaceName}{$className}::{$methodName}");
+            throw new PhpGeneratorException("First param type invalid in {$namespaceName}{$className}::{$methodName}");
         }
 
         $requestNameParts = $firstParam->type->parts;
         $requestName      = implode('\\', $requestNameParts);
 
         if ($method->stmts === NULL) {
-            throw new GeneratorException("Method body invalid in {$namespaceName}{$className}::{$methodName}");
+            throw new PhpGeneratorException("Method body invalid in {$namespaceName}{$className}::{$methodName}");
         }
 
         $returnEntry = NULL;
@@ -208,25 +208,25 @@ class Generator
         }
 
         if ($returnEntry === NULL) {
-            throw new GeneratorException("Return statement not found in {$namespaceName}{$className}::{$methodName}");
+            throw new PhpGeneratorException("Return statement not found in {$namespaceName}{$className}::{$methodName}");
         }
 
         if (!($returnEntry->expr instanceof \PhpParser\Node\Expr\MethodCall)) {
-            throw new GeneratorException("Return statement not calling _simpleRequest in {$namespaceName}{$className}::{$methodName}");
+            throw new PhpGeneratorException("Return statement not calling _simpleRequest in {$namespaceName}{$className}::{$methodName}");
         }
 
         if ($returnEntry->expr->name !== '_simpleRequest') {
-            throw new GeneratorException("Return statement not calling _simpleRequest in {$namespaceName}{$className}::{$methodName}");
+            throw new PhpGeneratorException("Return statement not calling _simpleRequest in {$namespaceName}{$className}::{$methodName}");
         }
 
         if (!isset($returnEntry->expr->args[2])) {
-            throw new GeneratorException("Third argument for _simpleRequest not found in {$namespaceName}{$className}::{$methodName}");
+            throw new PhpGeneratorException("Third argument for _simpleRequest not found in {$namespaceName}{$className}::{$methodName}");
         }
 
         $thirdArg = $returnEntry->expr->args[2];
 
         if (!($thirdArg->value instanceof \PhpParser\Node\Scalar\String_)) {
-            throw new GeneratorException("Third argument for _simpleRequest is not string in {$namespaceName}{$className}::{$methodName}");
+            throw new PhpGeneratorException("Third argument for _simpleRequest is not string in {$namespaceName}{$className}::{$methodName}");
         }
 
         $replyNameParts = explode('\\', ltrim(str_replace('::deserialize', '', $thirdArg->value->value), '\\'));
@@ -335,7 +335,7 @@ STR;
     /**
      * @param string $inputPath
      *
-     * @return Generator
+     * @return PhpGenerator
      */
     public function setInputPath($inputPath)
     {
@@ -347,7 +347,7 @@ STR;
     /**
      * @param string $outputPath
      *
-     * @return Generator
+     * @return PhpGenerator
      */
     public function setOutputPath($outputPath)
     {
@@ -359,7 +359,7 @@ STR;
     /**
      * @param int $versionCompatible
      *
-     * @return Generator
+     * @return PhpGenerator
      */
     public function setVersionCompatible($versionCompatible)
     {
@@ -371,7 +371,7 @@ STR;
     /**
      * @param string $parentClass
      *
-     * @return Generator
+     * @return PhpGenerator
      */
     public function setParentClass($parentClass)
     {

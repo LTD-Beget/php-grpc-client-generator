@@ -3,11 +3,11 @@
 namespace LTDBeget\PhpProtoGenerator;
 
 /**
- * Class GeneratorException
+ * Class PhpGeneratorException
  *
  * @package LTDBeget\PhpProtoGenerator
  */
-class GeneratorException extends \Exception
+class PhpGeneratorException extends \Exception
 {
 
 }
