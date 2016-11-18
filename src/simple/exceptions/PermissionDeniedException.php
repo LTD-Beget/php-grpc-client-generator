@@ -3,11 +3,11 @@
 namespace LTDBeget\util\PhpProtoGenerator\simple\exceptions;
 
 /**
- * Class ClientSimpleException
+ * Class PermissionDeniedException
  *
  * @package LTDBeget\util\PhpProtoGenerator\simple\exceptions
  */
-class ClientSimpleException extends \Exception
+class PermissionDeniedException extends ClientSimpleException
 {
 
 }

@@ -17,7 +17,7 @@
   },
   "autoload": {
     "psr-4": {
-      "LTDBeget\\PhpProtoGenerator\\": [
+      "LTDBeget\\util\\PhpProtoGenerator\\": [
         "src/"
       ]
     }

@@ -1,11 +1,11 @@
 <?php
 
-namespace LTDBeget\PhpProtoGenerator;
+namespace LTDBeget\util\PhpProtoGenerator;
 
 /**
  * Class PhpGenerator
  *
- * @package LTDBeget\PhpProtoGenerator
+ * @package LTDBeget\util\PhpProtoGenerator
  */
 class PhpGenerator
 {
@@ -34,7 +34,7 @@ class PhpGenerator
     /**
      * @var string
      */
-    protected $parentClass;
+    protected $parentClass = '\\LTDBeget\\util\\PhpProtoGenerator\\simple\BaseClientSimple';
 
     /**
      * @throws \Exception
@@ -42,11 +42,7 @@ class PhpGenerator
     public function run()
     {
         foreach ($this->getPhpFilesRecursive() as $phpFile) {
-            try {
-                $this->parseAndCreate($phpFile);
-            } catch (\Exception $e) {
-                throw $e;
-            }
+            $this->parseAndCreate($phpFile);
         }
     }
 

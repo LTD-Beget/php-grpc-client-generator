@@ -3,11 +3,11 @@
 namespace LTDBeget\util\PhpProtoGenerator\simple\exceptions;
 
 /**
- * Class ClientSimpleException
+ * Class OutOfRangeException
  *
  * @package LTDBeget\util\PhpProtoGenerator\simple\exceptions
  */
-class ClientSimpleException extends \Exception
+class OutOfRangeException extends ClientSimpleException
 {
 
 }

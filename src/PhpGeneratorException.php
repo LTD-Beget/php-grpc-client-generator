@@ -1,11 +1,11 @@
 <?php
 
-namespace LTDBeget\PhpProtoGenerator;
+namespace LTDBeget\util\PhpProtoGenerator;
 
 /**
  * Class PhpGeneratorException
  *
- * @package LTDBeget\PhpProtoGenerator
+ * @package LTDBeget\util\PhpProtoGenerator
  */
 class PhpGeneratorException extends \Exception
 {
