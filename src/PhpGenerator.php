@@ -34,7 +34,7 @@ class PhpGenerator
     /**
      * @var string
      */
-    protected $parentClass = '\\LTDBeget\\util\\PhpProtoGenerator\\simple\BaseClientSimple';
+    protected $parentClass = '\\LTDBeget\\util\\PhpProtoGenerator\\simple\\BaseClientSimple';
 
     /**
      * @throws \Exception
