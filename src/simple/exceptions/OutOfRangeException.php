@@ -7,7 +7,7 @@ namespace LTDBeget\util\PhpProtoGenerator\simple\exceptions;
  *
  * @package LTDBeget\util\PhpProtoGenerator\simple\exceptions
  */
-class OutOfRangeException extends ClientSimpleException
+class OutOfRangeException extends GrpcClientException
 {
 
 }

@@ -7,7 +7,7 @@ namespace LTDBeget\util\PhpProtoGenerator\simple\exceptions;
  *
  * @package LTDBeget\util\PhpProtoGenerator\simple\exceptions
  */
-class InternalException extends ClientSimpleException
+class InternalException extends GrpcClientException
 {
 
 }

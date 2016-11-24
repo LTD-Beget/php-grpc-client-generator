@@ -9,7 +9,7 @@ namespace LTDBeget\util\PhpProtoGenerator;
  */
 class PhpGenerator
 {
-    const STUB_PARENT_CLASS_NS = '\Grpc\BaseStub';
+    const STUB_PARENT_CLASS_NS = '\\Grpc\\BaseStub';
 
     /**
      * @var string
@@ -259,30 +259,49 @@ class PhpGenerator
                 $request = $__item['request'];
                 $reply   = $__item['reply'];
 
+                $requestNsParts = explode('\\', $request);
+                $requestClass   = array_pop($requestNsParts);
+                $replyNsParts   = explode('\\', $reply);
+                $replyClass     = array_pop($replyNsParts);
+
                 $methodsContents[] = <<<STR
     /**
-     * @param \\$request \$request
+     * @param {$requestClass} \$request
      * @param array \$metadata
      * @param array \$options
      *
-     * @return \\$reply
-     * @throws \Exception
+     * @return {$replyClass}
+     * @throws GrpcClientException
      */
-    public function $methodName(\\$request \$request, \$metadata = [], \$options = [])
+    public function {$methodName}({$requestClass} \$request, array \$metadata = [], array \$options = [])
     {
         try {
-            /* @var \\Grpc\\UnaryCall \$call */
-            \$call = \$this->client->$methodName(\$request, \$metadata, \$options);
+
+            /* @var UnaryCall \$call */
+            \$call = \$this->client->{$methodName}(
+                \$request,
+                array_merge_recursive(\$this->metadata, \$metadata),
+                array_merge_recursive(\$this->options, \$options)
+            );
+
             list(\$reply, \$status) = \$call->wait();
+
             \$this->checkStatus(\$status);
-        } catch (\\Exception \$e) {
+
+        } catch (GrpcClientException \$e) {
             throw \$e;
+        } catch (\\Exception \$e) {
+            throw new GrpcClientException("Unexpected exception: {\$e->getMessage()}", \$e->getCode(), \$e);
         }
 
         return \$reply;
     }
 STR;
             }
+
+            $baseClassNs    = ltrim($this->parentClass, '\\');
+            $baseClassParts = explode('\\', $baseClassNs);
+            $baseClassName  = end($baseClassParts);
 
             $classStart = <<<STR
 <?php
@@ -293,24 +312,42 @@ STR;
 
 namespace {$namespaceName};
 
+use {$baseClassNs};
+use LTDBeget\\util\\PhpProtoGenerator\\simple\\exceptions\\GrpcClientException;
+use Grpc\\UnaryCall;
+
 /**
  * Class {$newClassName}
  *
  * @package {$namespaceName}
  */
-class {$newClassName} extends {$this->parentClass}
+class {$newClassName} extends {$baseClassName}
 {
     /**
-     * @var \\{$namespaceName}\\{$className}
+     * @var {$className}
      */
     protected \$client;
 
     /**
-     * @param \\{$namespaceName}\\{$className} \$client
+     * @var array
      */
-    public function __construct(\\{$namespaceName}\\{$className} \$client)
+    protected \$metadata;
+
+    /**
+     * @var array
+     */
+    protected \$options;
+
+    /**
+     * @param {$className} \$client
+     * @param array \$metadata
+     * @param array \$options
+     */
+    public function __construct({$className} \$client, array \$metadata = [], array \$options = [])
     {
-        \$this->client = \$client;
+        \$this->client   = \$client;
+        \$this->metadata = \$metadata;
+        \$this->options  = \$options;
     }
 
 

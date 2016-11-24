@@ -7,7 +7,7 @@ namespace LTDBeget\util\PhpProtoGenerator\simple\exceptions;
  *
  * @package LTDBeget\util\PhpProtoGenerator\simple\exceptions
  */
-class PermissionDeniedException extends ClientSimpleException
+class PermissionDeniedException extends GrpcClientException
 {
 
 }

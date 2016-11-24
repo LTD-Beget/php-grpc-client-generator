@@ -7,7 +7,7 @@ namespace LTDBeget\util\PhpProtoGenerator\simple\exceptions;
  *
  * @package LTDBeget\util\PhpProtoGenerator\simple\exceptions
  */
-class UnavailableException extends ClientSimpleException
+class UnavailableException extends GrpcClientException
 {
 
 }

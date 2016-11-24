@@ -7,7 +7,7 @@ namespace LTDBeget\util\PhpProtoGenerator\simple\exceptions;
  *
  * @package LTDBeget\util\PhpProtoGenerator\simple\exceptions
  */
-class DeadlineExceededException extends ClientSimpleException
+class DeadlineExceededException extends GrpcClientException
 {
 
 }

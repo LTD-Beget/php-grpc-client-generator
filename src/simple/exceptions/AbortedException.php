@@ -7,7 +7,7 @@ namespace LTDBeget\util\PhpProtoGenerator\simple\exceptions;
  *
  * @package LTDBeget\util\PhpProtoGenerator\simple\exceptions
  */
-class AbortedException extends ClientSimpleException
+class AbortedException extends GrpcClientException
 {
 
 }

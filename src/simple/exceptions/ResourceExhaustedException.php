@@ -7,7 +7,7 @@ namespace LTDBeget\util\PhpProtoGenerator\simple\exceptions;
  *
  * @package LTDBeget\util\PhpProtoGenerator\simple\exceptions
  */
-class ResourceExhaustedException extends ClientSimpleException
+class ResourceExhaustedException extends GrpcClientException
 {
 
 }

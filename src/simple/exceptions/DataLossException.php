@@ -7,7 +7,7 @@ namespace LTDBeget\util\PhpProtoGenerator\simple\exceptions;
  *
  * @package LTDBeget\util\PhpProtoGenerator\simple\exceptions
  */
-class DataLossException extends ClientSimpleException
+class DataLossException extends GrpcClientException
 {
 
 }

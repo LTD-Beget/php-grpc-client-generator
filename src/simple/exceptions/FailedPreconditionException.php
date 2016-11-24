@@ -7,7 +7,7 @@ namespace LTDBeget\util\PhpProtoGenerator\simple\exceptions;
  *
  * @package LTDBeget\util\PhpProtoGenerator\simple\exceptions
  */
-class FailedPreconditionException extends ClientSimpleException
+class FailedPreconditionException extends GrpcClientException
 {
 
 }

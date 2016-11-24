@@ -7,7 +7,7 @@ namespace LTDBeget\util\PhpProtoGenerator\simple\exceptions;
  *
  * @package LTDBeget\util\PhpProtoGenerator\simple\exceptions
  */
-class UnknownException extends ClientSimpleException
+class UnknownException extends GrpcClientException
 {
 
 }

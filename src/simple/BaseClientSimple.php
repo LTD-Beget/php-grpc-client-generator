@@ -5,10 +5,10 @@ namespace LTDBeget\util\PhpProtoGenerator\simple;
 use LTDBeget\util\PhpProtoGenerator\simple\exceptions\AbortedException;
 use LTDBeget\util\PhpProtoGenerator\simple\exceptions\AlreadyExistsException;
 use LTDBeget\util\PhpProtoGenerator\simple\exceptions\CanceledException;
-use LTDBeget\util\PhpProtoGenerator\simple\exceptions\ClientSimpleException;
 use LTDBeget\util\PhpProtoGenerator\simple\exceptions\DataLossException;
 use LTDBeget\util\PhpProtoGenerator\simple\exceptions\DeadlineExceededException;
 use LTDBeget\util\PhpProtoGenerator\simple\exceptions\FailedPreconditionException;
+use LTDBeget\util\PhpProtoGenerator\simple\exceptions\GrpcClientException;
 use LTDBeget\util\PhpProtoGenerator\simple\exceptions\UnavailableException;
 use LTDBeget\util\PhpProtoGenerator\simple\exceptions\InternalException;
 use LTDBeget\util\PhpProtoGenerator\simple\exceptions\InvalidArgumentException;
@@ -35,10 +35,10 @@ class BaseClientSimple
      * @throws AbortedException
      * @throws AlreadyExistsException
      * @throws CanceledException
-     * @throws ClientSimpleException
      * @throws DataLossException
      * @throws DeadlineExceededException
      * @throws FailedPreconditionException
+     * @throws GrpcClientException
      * @throws InternalException
      * @throws InvalidArgumentException
      * @throws NotFoundException
@@ -89,7 +89,7 @@ class BaseClientSimple
             case 16:
                 throw new UnauthenticatedException("Unauthenticated: {$status->details}", $status->code);
             default:
-                throw new ClientSimpleException("Unknown status {$status->code}: {$status->details}", $status->code);
+                throw new GrpcClientException("Unknown status {$status->code}: {$status->details}", $status->code);
         }
     }
 }

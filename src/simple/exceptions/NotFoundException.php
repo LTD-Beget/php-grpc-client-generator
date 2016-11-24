@@ -7,7 +7,7 @@ namespace LTDBeget\util\PhpProtoGenerator\simple\exceptions;
  *
  * @package LTDBeget\util\PhpProtoGenerator\simple\exceptions
  */
-class NotFoundException extends ClientSimpleException
+class NotFoundException extends GrpcClientException
 {
 
 }
