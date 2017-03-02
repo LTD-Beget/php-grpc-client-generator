@@ -1,29 +1,29 @@
 <?php
 
-namespace LTDBeget\util\PhpProtoGenerator\simple;
+namespace LTDBeget\util\PhpGrpcClientGenerator\simple;
 
-use LTDBeget\util\PhpProtoGenerator\simple\exceptions\AbortedException;
-use LTDBeget\util\PhpProtoGenerator\simple\exceptions\AlreadyExistsException;
-use LTDBeget\util\PhpProtoGenerator\simple\exceptions\CanceledException;
-use LTDBeget\util\PhpProtoGenerator\simple\exceptions\DataLossException;
-use LTDBeget\util\PhpProtoGenerator\simple\exceptions\DeadlineExceededException;
-use LTDBeget\util\PhpProtoGenerator\simple\exceptions\FailedPreconditionException;
-use LTDBeget\util\PhpProtoGenerator\simple\exceptions\GrpcClientException;
-use LTDBeget\util\PhpProtoGenerator\simple\exceptions\UnavailableException;
-use LTDBeget\util\PhpProtoGenerator\simple\exceptions\InternalException;
-use LTDBeget\util\PhpProtoGenerator\simple\exceptions\InvalidArgumentException;
-use LTDBeget\util\PhpProtoGenerator\simple\exceptions\NotFoundException;
-use LTDBeget\util\PhpProtoGenerator\simple\exceptions\OutOfRangeException;
-use LTDBeget\util\PhpProtoGenerator\simple\exceptions\PermissionDeniedException;
-use LTDBeget\util\PhpProtoGenerator\simple\exceptions\ResourceExhaustedException;
-use LTDBeget\util\PhpProtoGenerator\simple\exceptions\UnauthenticatedException;
-use LTDBeget\util\PhpProtoGenerator\simple\exceptions\UnimplementedException;
-use LTDBeget\util\PhpProtoGenerator\simple\exceptions\UnknownException;
+use LTDBeget\util\PhpGrpcClientGenerator\simple\exceptions\AbortedException;
+use LTDBeget\util\PhpGrpcClientGenerator\simple\exceptions\AlreadyExistsException;
+use LTDBeget\util\PhpGrpcClientGenerator\simple\exceptions\CanceledException;
+use LTDBeget\util\PhpGrpcClientGenerator\simple\exceptions\DataLossException;
+use LTDBeget\util\PhpGrpcClientGenerator\simple\exceptions\DeadlineExceededException;
+use LTDBeget\util\PhpGrpcClientGenerator\simple\exceptions\FailedPreconditionException;
+use LTDBeget\util\PhpGrpcClientGenerator\simple\exceptions\GrpcClientException;
+use LTDBeget\util\PhpGrpcClientGenerator\simple\exceptions\UnavailableException;
+use LTDBeget\util\PhpGrpcClientGenerator\simple\exceptions\InternalException;
+use LTDBeget\util\PhpGrpcClientGenerator\simple\exceptions\InvalidArgumentException;
+use LTDBeget\util\PhpGrpcClientGenerator\simple\exceptions\NotFoundException;
+use LTDBeget\util\PhpGrpcClientGenerator\simple\exceptions\OutOfRangeException;
+use LTDBeget\util\PhpGrpcClientGenerator\simple\exceptions\PermissionDeniedException;
+use LTDBeget\util\PhpGrpcClientGenerator\simple\exceptions\ResourceExhaustedException;
+use LTDBeget\util\PhpGrpcClientGenerator\simple\exceptions\UnauthenticatedException;
+use LTDBeget\util\PhpGrpcClientGenerator\simple\exceptions\UnimplementedException;
+use LTDBeget\util\PhpGrpcClientGenerator\simple\exceptions\UnknownException;
 
 /**
  * Class BaseClientSimple
  *
- * @package LTDBeget\util\PhpProtoGenerator\simple
+ * @package LTDBeget\util\PhpGrpcClientGenerator\simple
  */
 class BaseClientSimple
 {

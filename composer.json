@@ -1,8 +1,8 @@
 {
-  "name": "ltd-beget/php-proto-generator",
-  "description": "Generate classes after protoc-gen-php",
+  "name": "ltd-beget/php-grpc-client-generator",
+  "description": "Generate grpc client classes after protoc-gen-php",
   "license": "MIT",
-  "keywords": ["proto"],
+  "keywords": ["proto", "grpc"],
   "min-stability": "dev",
   "authors": [
     {
@@ -17,7 +17,7 @@
   },
   "autoload": {
     "psr-4": {
-      "LTDBeget\\util\\PhpProtoGenerator\\": [
+      "LTDBeget\\util\\PhpGrpcClientGenerator\\": [
         "src/"
       ]
     }

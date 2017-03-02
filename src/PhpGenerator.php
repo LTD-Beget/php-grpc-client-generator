@@ -1,11 +1,20 @@
 <?php
 
-namespace LTDBeget\util\PhpProtoGenerator;
+namespace LTDBeget\util\PhpGrpcClientGenerator;
+
+use PhpParser\Node\Expr\MethodCall;
+use PhpParser\Node\Name\FullyQualified;
+use PhpParser\Node\Scalar\String_;
+use PhpParser\Node\Stmt\Class_;
+use PhpParser\Node\Stmt\ClassMethod;
+use PhpParser\Node\Stmt\Namespace_;
+use PhpParser\Node\Stmt\Return_;
+use PhpParser\ParserFactory;
 
 /**
  * Class PhpGenerator
  *
- * @package LTDBeget\util\PhpProtoGenerator
+ * @package LTDBeget\util\PhpGrpcClientGenerator
  */
 class PhpGenerator
 {
@@ -24,7 +33,7 @@ class PhpGenerator
     /**
      * @var int
      */
-    protected $versionCompatible = \PhpParser\ParserFactory::PREFER_PHP5;
+    protected $versionCompatible = ParserFactory::PREFER_PHP5;
 
     /**
      * @var array
@@ -34,7 +43,7 @@ class PhpGenerator
     /**
      * @var string
      */
-    protected $parentClass = '\\LTDBeget\\util\\PhpProtoGenerator\\simple\\BaseClientSimple';
+    protected $parentClass = '\\LTDBeget\\util\\PhpGrpcClientGenerator\\simple\\BaseClientSimple';
 
     /**
      * @throws \Exception
@@ -75,8 +84,8 @@ class PhpGenerator
         $result = [];
 
         $directory = new \RecursiveDirectoryIterator($this->inputPath);
-        $iterator  = new \RecursiveIteratorIterator($directory);
-        $regex     = new \RegexIterator($iterator, '/^.+\.php$/i', \RecursiveRegexIterator::GET_MATCH);
+        $iterator = new \RecursiveIteratorIterator($directory);
+        $regex = new \RegexIterator($iterator, '/^.+\.php$/i', \RecursiveRegexIterator::GET_MATCH);
 
         foreach ($regex as $file) {
             if (!is_array($file)) {
@@ -94,30 +103,30 @@ class PhpGenerator
      */
     private function parse($phpFile)
     {
-        $code   = file_get_contents($phpFile);
-        $parser = (new \PhpParser\ParserFactory)->create($this->versionCompatible);
-        $stmts  = $parser->parse($code);
+        $code = file_get_contents($phpFile);
+        $parser = (new ParserFactory)->create($this->versionCompatible);
+        $stmts = $parser->parse($code);
 
         if ($stmts === NULL) {
             return;
         }
 
         foreach ($stmts as $namespace) {
-            if (!($namespace instanceof \PhpParser\Node\Stmt\Namespace_)) {
+            if (!($namespace instanceof Namespace_)) {
                 continue;
             }
 
-            /* @var \PhpParser\Node\Stmt\Namespace_ $namespace */
+            /* @var Namespace_ $namespace */
 
             $namespaceNameParts = $namespace->name->parts;
-            $namespaceName      = implode('\\', $namespaceNameParts);
+            $namespaceName = implode('\\', $namespaceNameParts);
 
             if ($namespace->stmts === NULL) {
                 continue;
             }
 
             foreach ($namespace->stmts as $class) {
-                if (!($class instanceof \PhpParser\Node\Stmt\Class_)) {
+                if (!($class instanceof Class_)) {
                     continue;
                 }
 
@@ -134,11 +143,11 @@ class PhpGenerator
                 $className = $class->name;
 
                 foreach ($class->stmts as $method) {
-                    if (!($method instanceof \PhpParser\Node\Stmt\ClassMethod)) {
+                    if (!($method instanceof ClassMethod)) {
                         continue;
                     }
 
-                    /* @var \PhpParser\Node\Stmt\ClassMethod $method */
+                    /* @var ClassMethod $method */
 
                     if ($method->name === "__construct") {
                         continue;
@@ -158,16 +167,16 @@ class PhpGenerator
      * 3 параметр - это нужный нам reply
      * пример '\hello\HelloReply::deserialize'
      *
-     * @param string                           $namespaceName
-     * @param string                           $className
-     * @param \PhpParser\Node\Stmt\ClassMethod $method
+     * @param string $namespaceName
+     * @param string $className
+     * @param ClassMethod $method
      *
      * @throws PhpGeneratorException
      */
-    private function processMethod($namespaceName, $className, \PhpParser\Node\Stmt\ClassMethod $method)
+    private function processMethod($namespaceName, $className, ClassMethod $method)
     {
         $methodName = $method->name;
-        $params     = $method->params;
+        $params = $method->params;
 
         if (!isset($params[0])) {
             throw new PhpGeneratorException("No params found in {$namespaceName}{$className}::{$methodName}");
@@ -180,12 +189,12 @@ class PhpGenerator
             throw new PhpGeneratorException("First param type invalid in {$namespaceName}{$className}::{$methodName}");
         }
 
-        if (!($firstParam->type instanceof \PhpParser\Node\Name\FullyQualified)) {
+        if (!($firstParam->type instanceof FullyQualified)) {
             throw new PhpGeneratorException("First param type invalid in {$namespaceName}{$className}::{$methodName}");
         }
 
         $requestNameParts = $firstParam->type->parts;
-        $requestName      = implode('\\', $requestNameParts);
+        $requestName = implode('\\', $requestNameParts);
 
         if ($method->stmts === NULL) {
             throw new PhpGeneratorException("Method body invalid in {$namespaceName}{$className}::{$methodName}");
@@ -194,7 +203,7 @@ class PhpGenerator
         $returnEntry = NULL;
 
         foreach ($method->stmts as $codeEntry) {
-            if (!($codeEntry instanceof \PhpParser\Node\Stmt\Return_)) {
+            if (!($codeEntry instanceof Return_)) {
                 continue;
             }
 
@@ -207,7 +216,7 @@ class PhpGenerator
             throw new PhpGeneratorException("Return statement not found in {$namespaceName}{$className}::{$methodName}");
         }
 
-        if (!($returnEntry->expr instanceof \PhpParser\Node\Expr\MethodCall)) {
+        if (!($returnEntry->expr instanceof MethodCall)) {
             throw new PhpGeneratorException("Return statement not calling _simpleRequest in {$namespaceName}{$className}::{$methodName}");
         }
 
@@ -221,15 +230,15 @@ class PhpGenerator
 
         $thirdArg = $returnEntry->expr->args[2];
 
-        if (!($thirdArg->value instanceof \PhpParser\Node\Scalar\String_)) {
+        if (!($thirdArg->value instanceof String_)) {
             throw new PhpGeneratorException("Third argument for _simpleRequest is not string in {$namespaceName}{$className}::{$methodName}");
         }
 
         $replyNameParts = explode('\\', ltrim(str_replace('::deserialize', '', $thirdArg->value->value), '\\'));
-        $replyName      = implode('\\', $replyNameParts);
+        $replyName = implode('\\', $replyNameParts);
 
         $this->storage[$namespaceName][$className][$methodName]['request'] = $requestName;
-        $this->storage[$namespaceName][$className][$methodName]['reply']   = $replyName;
+        $this->storage[$namespaceName][$className][$methodName]['reply'] = $replyName;
     }
 
     private function create()
@@ -238,7 +247,7 @@ class PhpGenerator
 
         foreach ($this->storage as $namespaceName => $_item) {
             $namespaceNameParts = explode('\\', $namespaceName);
-            $parentPath         = $this->outputPath;
+            $parentPath = $this->outputPath;
 
             foreach ($namespaceNameParts as $nameSpacePart) {
                 $childPath = $parentPath . '/' . $nameSpacePart;
@@ -250,19 +259,19 @@ class PhpGenerator
                 $parentPath = $childPath;
             }
 
-            $className       = array_keys($_item)[0];
-            $newClassName    = "{$className}Simple";
-            $fileName        = $parentPath . '/' . $newClassName . '.php';
+            $className = array_keys($_item)[0];
+            $newClassName = "{$className}Simple";
+            $fileName = $parentPath . '/' . $newClassName . '.php';
             $methodsContents = [];
 
             foreach ($_item[$className] as $methodName => $__item) {
                 $request = $__item['request'];
-                $reply   = $__item['reply'];
+                $reply = $__item['reply'];
 
                 $requestNsParts = explode('\\', $request);
-                $requestClass   = array_pop($requestNsParts);
-                $replyNsParts   = explode('\\', $reply);
-                $replyClass     = array_pop($replyNsParts);
+                $requestClass = array_pop($requestNsParts);
+                $replyNsParts = explode('\\', $reply);
+                $replyClass = array_pop($replyNsParts);
 
                 $methodsContents[] = <<<STR
     /**
@@ -299,9 +308,9 @@ class PhpGenerator
 STR;
             }
 
-            $baseClassNs    = ltrim($this->parentClass, '\\');
+            $baseClassNs = ltrim($this->parentClass, '\\');
             $baseClassParts = explode('\\', $baseClassNs);
-            $baseClassName  = end($baseClassParts);
+            $baseClassName = end($baseClassParts);
 
             $classStart = <<<STR
 <?php
@@ -313,7 +322,7 @@ STR;
 namespace {$namespaceName};
 
 use {$baseClassNs};
-use LTDBeget\\util\\PhpProtoGenerator\\simple\\exceptions\\GrpcClientException;
+use LTDBeget\\util\\PhpGrpcClientGenerator\\simple\\exceptions\\GrpcClientException;
 use Grpc\\UnaryCall;
 
 /**

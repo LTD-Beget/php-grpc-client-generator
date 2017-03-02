@@ -1,11 +1,11 @@
 <?php
 
-namespace LTDBeget\util\PhpProtoGenerator\simple\exceptions;
+namespace LTDBeget\util\PhpGrpcClientGenerator\simple\exceptions;
 
 /**
  * Class FailedPreconditionException
  *
- * @package LTDBeget\util\PhpProtoGenerator\simple\exceptions
+ * @package LTDBeget\util\PhpGrpcClientGenerator\simple\exceptions
  */
 class FailedPreconditionException extends GrpcClientException
 {
