@@ -116,6 +116,10 @@ class PhpGenerator
                 continue;
             }
 
+            if ($namespace->name == NULL) {
+                continue;
+            }
+
             /* @var Namespace_ $namespace */
 
             $namespaceNameParts = $namespace->name->parts;
