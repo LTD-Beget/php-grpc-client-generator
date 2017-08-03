@@ -288,6 +288,8 @@ class PhpGenerator
      */
     public function {$methodName}({$requestClass} \$request, array \$metadata = [], array \$options = [])
     {
+        \$this->execHook(\$methodName, \$request, \$metadata, \$options);
+    
         try {
 
             /* @var UnaryCall \$call */

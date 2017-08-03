@@ -2,6 +2,7 @@
 
 namespace LTDBeget\util\PhpGrpcClientGenerator\simple;
 
+use LTDBeget\util\PhpGrpcClientGenerator\RpcCallHook;
 use LTDBeget\util\PhpGrpcClientGenerator\simple\exceptions\AbortedException;
 use LTDBeget\util\PhpGrpcClientGenerator\simple\exceptions\AlreadyExistsException;
 use LTDBeget\util\PhpGrpcClientGenerator\simple\exceptions\CanceledException;
@@ -9,6 +10,7 @@ use LTDBeget\util\PhpGrpcClientGenerator\simple\exceptions\DataLossException;
 use LTDBeget\util\PhpGrpcClientGenerator\simple\exceptions\DeadlineExceededException;
 use LTDBeget\util\PhpGrpcClientGenerator\simple\exceptions\FailedPreconditionException;
 use LTDBeget\util\PhpGrpcClientGenerator\simple\exceptions\GrpcClientException;
+use LTDBeget\util\PhpGrpcClientGenerator\simple\exceptions\GrpcClientHookException;
 use LTDBeget\util\PhpGrpcClientGenerator\simple\exceptions\UnavailableException;
 use LTDBeget\util\PhpGrpcClientGenerator\simple\exceptions\InternalException;
 use LTDBeget\util\PhpGrpcClientGenerator\simple\exceptions\InvalidArgumentException;
@@ -27,6 +29,23 @@ use LTDBeget\util\PhpGrpcClientGenerator\simple\exceptions\UnknownException;
  */
 class BaseClientSimple
 {
+    /**
+     * @var RpcCallHook
+     */
+    protected $hook;
+
+    /**
+     * @param RpcCallHook $hook
+     *
+     * @return $this
+     */
+    public function setHook(RpcCallHook $hook)
+    {
+        $this->hook = $hook;
+
+        return $this;
+    }
+
     /**
      * https://github.com/grpc/grpc-go/blob/master/codes/codes.go
      *
@@ -90,6 +109,27 @@ class BaseClientSimple
                 throw new UnauthenticatedException("Unauthenticated: {$status->details}", $status->code);
             default:
                 throw new GrpcClientException("Unknown status {$status->code}: {$status->details}", $status->code);
+        }
+    }
+
+    /**
+     * @param string  $method
+     * @param mixed   $request
+     * @param array   $metadata
+     * @param array   $options
+     *
+     * @throws GrpcClientHookException
+     */
+    protected function execHook($method, $request, array $metadata = [], array $options = [])
+    {
+        if (!$this->hook) {
+            return;
+        }
+
+        try {
+            $this->hook->onCall($method, $request, $metadata, $options);
+        } catch (\Exception $e) {
+            throw new GrpcClientHookException("grpc client hoot exception: {$e->getMessage()}", $e->getCode(), $e);
         }
     }
 }
