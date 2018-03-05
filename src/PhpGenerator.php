@@ -190,7 +190,7 @@ class PhpGenerator
         $firstParam = $params[0];
 
         if ($firstParam->type === NULL) {
-            throw new PhpGeneratorException("First param type invalid in {$namespaceName}{$className}::{$methodName}");
+            return;
         }
 
         if (!($firstParam->type instanceof FullyQualified)) {
