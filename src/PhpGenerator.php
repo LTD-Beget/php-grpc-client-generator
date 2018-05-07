@@ -289,7 +289,9 @@ class PhpGenerator
     public function {$methodName}({$requestClass} \$request, array \$metadata = [], array \$options = [])
     {
         try {
-
+            \$i = 0;
+            grpc_call:
+            
             /* @var UnaryCall \$call */
             \$call = \$this->client->{$methodName}(
                 \$request,
@@ -298,6 +300,10 @@ class PhpGenerator
             );
 
             list(\$reply, \$status) = \$call->wait();
+            
+            if(\$status->code == 14 && \$status->details == "OS Error" && ++\$i < 5) {
+                goto grpc_call;            
+            }
 
             \$this->checkStatus(\$status);
 
