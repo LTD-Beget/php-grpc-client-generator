@@ -100,6 +100,8 @@ class PhpGenerator
 
     /**
      * @param string $phpFile
+     *
+     * @throws PhpGeneratorException
      */
     private function parse($phpFile)
     {
