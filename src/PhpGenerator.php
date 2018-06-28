@@ -159,7 +159,7 @@ class PhpGenerator
                         continue;
                     }
 
-                    $this->processMethod($namespaceName, $className, $method);
+                    $this->processMethod($namespaceName, $className->name, $method);
                 }
             }
         }
@@ -223,11 +223,11 @@ class PhpGenerator
         }
 
         if (!($returnEntry->expr instanceof MethodCall)) {
-            throw new PhpGeneratorException("Return statement not calling _simpleRequest in {$namespaceName}{$className}::{$methodName}");
+            throw new PhpGeneratorException("{$returnEntry->expr->name} // Return statement not calling _simpleRequest in {$namespaceName}{$className}::{$methodName}");
         }
 
-        if ($returnEntry->expr->name !== '_simpleRequest') {
-            throw new PhpGeneratorException("Return statement not calling _simpleRequest in {$namespaceName}{$className}::{$methodName}");
+        if ($returnEntry->expr->name->name !== '_simpleRequest') {
+            throw new PhpGeneratorException("{$returnEntry->expr->name} // Return statement not calling _simpleRequest in {$namespaceName}{$className}::{$methodName}");
         }
 
         if (!isset($returnEntry->expr->args[2])) {
@@ -243,8 +243,8 @@ class PhpGenerator
         $replyNameParts = explode('\\', ltrim(str_replace('::deserialize', '', $thirdArg->value->value), '\\'));
         $replyName = implode('\\', $replyNameParts);
 
-        $this->storage[$namespaceName][$className][$methodName]['request'] = $requestName;
-        $this->storage[$namespaceName][$className][$methodName]['reply'] = $replyName;
+        $this->storage[$namespaceName][$className][$methodName->name]['request'] = $requestName;
+        $this->storage[$namespaceName][$className][$methodName->name]['reply'] = $replyName;
     }
 
     private function create()
